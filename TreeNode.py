@@ -10,9 +10,7 @@ class TreeNode:
         if self.char == char:
             return True
         if self.left != None:
-            if self.left.has_char(char):
-                return True
+            return self.left.has_char(char)
         if self.left != None:
-            if self.right.has_char(char):
-                return True
+            return self.right.has_char(char)
         return False
