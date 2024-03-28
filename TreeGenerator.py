@@ -1,8 +1,10 @@
+from Binary import Binary
 from TreeNode import TreeNode
 
 
 class TreeGenerator:
-    chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'w',
+    chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+             'w',
              'x', 'y', 'z', ' ']
     char_count = [0 for i in chars]
 
@@ -49,6 +51,8 @@ lengths = [[] for _ in range(8)]
 for char in tr.chars:
     lengths[len(tr.get_navigation_path(char))].append(char)
 
+char_message_dir = {}
+
 print(lengths)
 message = []
 for i in range(len(lengths)):
@@ -63,16 +67,34 @@ for i in range(len(lengths)):
         while len(message) < i:
             message.append(0)
 
-        str_mes = ""
-        for binn in message:
-            if binn == 0:
-                str_mes += "0"
-            else:
-                str_mes += "1"
-        print(str_mes)
+        char_message_dir[element] = message.copy()
+
+print(char_message_dir)  # canonical code
+
+to_send = Binary()
+to_send.pop()  # usuwamy początkowe 0
+
+for char in tr.text:
+    for binn in char_message_dir[char]:
+        to_send.append(binn)
+
+print(to_send.get_string())  # to send encoded message
+
+# decode
+message = []
+decoded_text = ""
+while to_send.can_pop():
+    message.append(to_send.pop())
+    if message in char_message_dir.values():
+        decoded_text += list(char_message_dir.keys())[list(char_message_dir.values()).index(message)]
+        message = []
+
+print(decoded_text)
+
+
 
 char_length = {}
 for char in tr.chars:
     char_length[char] = len(tr.get_navigation_path(char))
 
-print(char_length.values())  # to send
+print(char_length.values())  # to send code book
