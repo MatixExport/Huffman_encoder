@@ -8,6 +8,26 @@ class TreeGenerator:
              'x', 'y', 'z', ' ']
     char_count = [0 for i in chars]
 
+    def encode(self, char_message_dir):
+        to_send = Binary()
+        to_send.pop()  # usuwamy początkowe 0
+
+        for char in self.text:
+            for binn in char_message_dir[char]:
+                to_send.append(binn)
+        return to_send
+
+    def decode(self, message, char_message_dir):
+        temp = []
+        decoded_text = ""
+        while message.can_pop():
+            temp.append(message.pop())
+            if temp in char_message_dir.values():
+                decoded_text += list(char_message_dir.keys())[list(char_message_dir.values()).index(temp)]
+                temp = []
+
+        return decoded_text
+
     def __init__(self):
         self.nodes = []
         self.text = "ala ma kotasdfsdafe asdfsdifgj mkdfg pdfugnadf nihs e prfjn aesf a sergdsgbccqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"
@@ -42,59 +62,50 @@ class TreeGenerator:
 
         return path
 
+    def get_char_lengths(self):
+        char_length = {}
+        for char in self.chars:
+            char_length[char] = len(self.get_navigation_path(char))
+
+        return char_length.values()
+
+    def group_chars_by_lengths(self):
+        lengths = [[] for _ in range(8)]
+
+        for char in self.chars:
+            lengths[len(self.get_navigation_path(char))].append(char)
+        return lengths
+
+    def get_codebook(self, lengths):
+        char_message_dir = {}
+
+        message = []
+        for i in range(len(lengths)):
+            for element in lengths[i]:
+                for j in range(len(message) - 1, -1, -1):
+                    if message[j] == 1:
+                        message[j] = 0
+                    else:
+                        message[j] += 1
+                        break
+
+                while len(message) < i:
+                    message.append(0)
+
+                char_message_dir[element] = message.copy()
+
+        return char_message_dir
+
 
 tr = TreeGenerator()
 tr.count_chars()
 tr.generate_tree()
-lengths = [[] for _ in range(8)]
-
-for char in tr.chars:
-    lengths[len(tr.get_navigation_path(char))].append(char)
-
-char_message_dir = {}
-
-print(lengths)
-message = []
-for i in range(len(lengths)):
-    for element in lengths[i]:
-        for j in range(len(message) - 1, -1, -1):
-            if message[j] == 1:
-                message[j] = 0
-            else:
-                message[j] += 1
-                break
-
-        while len(message) < i:
-            message.append(0)
-
-        char_message_dir[element] = message.copy()
-
-print(char_message_dir)  # canonical code
-
-to_send = Binary()
-to_send.pop()  # usuwamy początkowe 0
-
-for char in tr.text:
-    for binn in char_message_dir[char]:
-        to_send.append(binn)
-
-print(to_send.get_string())  # to send encoded message
-
-# decode
-message = []
-decoded_text = ""
-while to_send.can_pop():
-    message.append(to_send.pop())
-    if message in char_message_dir.values():
-        decoded_text += list(char_message_dir.keys())[list(char_message_dir.values()).index(message)]
-        message = []
-
-print(decoded_text)
-
-
-
-char_length = {}
-for char in tr.chars:
-    char_length[char] = len(tr.get_navigation_path(char))
-
-print(char_length.values())  # to send code book
+print(
+    tr.decode(
+        tr.encode(
+            tr.get_codebook(
+                tr.group_chars_by_lengths()
+            )
+        ),
+        tr.get_codebook(tr.group_chars_by_lengths())
+    ))
