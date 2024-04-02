@@ -9,9 +9,9 @@ class TreeNode:
     def has_char(self, char):
         if self.char == char:
             return True
-        if self.left != None:
+        if self.left is not None:
             if self.left.has_char(char):
                 return True
-        if self.right != None:
+        if self.right is not None:
             return self.right.has_char(char)
         return False
