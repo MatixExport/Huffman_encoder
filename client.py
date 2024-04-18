@@ -1,6 +1,6 @@
 import socket
 
-from codebookGenerator import get_char_lengths
+from codebookGenerator import get_char_lengths, generate_codebook
 from encoder import encode
 
 sock = socket.socket()
@@ -8,7 +8,7 @@ sock = socket.socket()
 
 sock.connect(('192.168.1.17', 8088))
 
-codebook_to_send = get_char_lengths("xddfgh")
-sock.send(bytes(codebook_to_send))
-sock.send(encode("xddfgh").get_bytes())
+lengths = get_char_lengths("xddfgh")
+sock.send(bytes(lengths))
+sock.send(encode("xddfgh"), generate_codebook(lengths))
 # socket.create_server(('192.168.1.21',8088))

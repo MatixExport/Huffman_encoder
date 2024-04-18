@@ -1,7 +1,7 @@
 import socket
 
-from Huffman_encoder.Binary import Binary
-from Huffman_encoder.encoder import decode
+from codebookGenerator import generate_codebook
+from encoder import decode
 
 sock = socket.socket()
 # print(socket.getaddrinfo('192.168.1.21',""))
@@ -14,9 +14,8 @@ while True:
     lengths = []
     for byte in codebook:
         lengths.append(int(byte))
+    codebook = generate_codebook(lengths)
     message = client.recv(100)
-    message_bin = Binary()
-    message_bin.set_bytes(message)
-    print(decode(message_bin,lengths))
+
+    print(decode(message, codebook))
     break
-# sock.connect(('192.168.1.21',8088))
