@@ -10,5 +10,5 @@ sock.connect(('192.168.1.17', 8088))
 
 lengths = get_char_lengths("xddfgh")
 sock.send(bytes(lengths))
-sock.send(encode("xddfgh"), generate_codebook(lengths))
+sock.send(encode("xddfgh", generate_codebook(lengths)))
 # socket.create_server(('192.168.1.21',8088))
