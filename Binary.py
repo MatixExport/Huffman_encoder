@@ -30,7 +30,7 @@ class Binary:
 
     def set_bytes(self, bytes):
         self.number_of_bits = len(bytes) * 8 - 1
-        self.value = int.from_bytes(bytes)
+        self.value = int.from_bytes(bytes, byteorder='big')
 
     def get_bytes(self):
         return self.value.to_bytes(ceil(self.number_of_bits / 8))

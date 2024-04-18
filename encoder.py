@@ -28,12 +28,12 @@ def decode(message, lengths):
     return decoded_text
 
 
-message_to_send = encode("xddfgh").get_bytes()
-received_message = Binary()
-
-received_message.set_bytes(message_to_send)
-
-codebook_to_send = get_char_lengths("xddfgh")
-# nie mamy paddingu więc akurat nam dodaje coś na początku
-
-print(decode(received_message, codebook_to_send))
+# message_to_send = encode("xddfgh").get_bytes()
+# received_message = Binary()
+#
+# received_message.set_bytes(message_to_send)
+#
+# codebook_to_send = get_char_lengths("xddfgh")
+# # nie mamy paddingu więc akurat nam dodaje coś na początku
+#
+# print(decode(received_message, codebook_to_send))
