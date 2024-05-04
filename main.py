@@ -13,12 +13,12 @@ def server(args):
     sock.listen(100)
 
     client, addr = sock.accept()
-    codebook = client.recv(100)
+    codebook = client.recv(108)
     lengths = []
     for byte in codebook:
         lengths.append(int(byte))
     codebook = generate_codebook(lengths)
-    message = client.recv(100)
+    message = client.recv(10000)
 
     file = open(args.file, "w+")
     file.write(decode(message, codebook))
@@ -37,6 +37,7 @@ def client(args):
     lengths = get_char_lengths(text)
     sock.send(bytes(lengths))
     sock.send(encode(text, generate_codebook(lengths)))
+    print(len(encode(text, generate_codebook(lengths))))
     file.close()
 
 
