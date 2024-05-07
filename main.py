@@ -22,13 +22,11 @@ def server(args):
 
     file = open(args.file, "w+")
     file.write(decode(message, codebook))
-    print(decode(message, codebook))
 
 
 def client(args):
     file = open(args.file)
     text = file.read()
-    print(text)  # jak tego nie ma to się wszystko psuje a ja nwm dlaczego
 
     sock = socket()
 
